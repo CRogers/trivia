@@ -6,4 +6,5 @@
 *.iws
 
 out/
+build/
 generated_src/
