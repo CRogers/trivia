@@ -1,60 +1,43 @@
 package com.adaptionsoft.games.trivia;
 
-import com.google.common.collect.Lists;
-import org.junit.Test;
+import com.adaptionsoft.games.uglytrivia.Game;
+import com.pholser.junit.quickcheck.Property;
+import com.pholser.junit.quickcheck.generator.InRange;
+import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
+import org.junit.runner.RunWith;
 
 import java.util.List;
 
+@RunWith(JUnitQuickcheck.class)
 public class GoldenMasterTests {
-    private enum Roll {
-        CORRECT,
-        WRONG
-    }
 
-    public static class Play {
-        public final int players;
-        private final int rolls;
+    @Property
+    public void golden_master_and_new_are_the_same(
+        @InRange(minInt = 2, maxInt = 6) int numberOfPlayers,
+        List<Boolean> answersAreCorrect,
+        List<@InRange(minInt = 0, maxInt = 6) Integer> rolls) {
 
-        public Play(int players, int rolls) {
-            this.players = players;
-            this.rolls = rolls;
+        System.out.println(String.format("%d\n%s\n%s", numberOfPlayers, answersAreCorrect, rolls));
+
+        Game game = new Game();
+        for (int i = 1; i < numberOfPlayers; i++) {
+            game.add("Player " + i);
         }
 
-        public boolean correctAnswerAt(int i) {
-            int place = 1 << i;
-            return
-        }
-    }
-
-    @Test
-    public void test_everything() {
-        List<Play> plays = Lists.newArrayList();
-        for (int numPlayers = 0; numPlayers < 6; numPlayers++) {
-            for (int maxRolls = 0; maxRolls < Math.pow(2, 16); maxRolls++) {
-
+        for(int i = 0; i < Math.min(answersAreCorrect.size(), rolls.size()); i++) {
+            game.roll(rolls.get(i));
+            boolean notAWinner = false;
+            if (answersAreCorrect.get(i)) {
+                notAWinner = game.wasCorrectlyAnswered();
+            } else {
+                notAWinner = game.wrongAnswer();
+            }
+            boolean gameWon = !notAWinner;
+            if (gameWon) {
+                break;
             }
         }
 
-//        Game game = new Game();
-//
-//        game.add("Chet");
-//        game.add("Pat");
-//        game.add("Sue");
-//
-//        Random rand = new Random();
-//
-//        do {
-//
-//            game.roll(rand.nextInt(5) + 1);
-//
-//            if (rand.nextInt(9) == 7) {
-//                notAWinner = game.wrongAnswer();
-//            } else {
-//                notAWinner = game.wasCorrectlyAnswered();
-//            }
-//
-//
-//
-//        } while (notAWinner);
+        System.out.println("\n\n----------------------------------------\n\n");
     }
 }
