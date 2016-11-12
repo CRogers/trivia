@@ -3,11 +3,13 @@ package com.adaptionsoft.games.uglytrivia;
 public class Player {
     private final Printer printer;
     private final CategorisedQuestions categorisedQuestions;
-    public final String name;
+
+    private final String name;
+
     private int place = 0;
-    public int goldCoinsInPurse = 0;
-    public boolean inPenaltyBox = false;
-    public boolean isGettingOutOfPenaltyBox = false;
+    private int goldCoinsInPurse = 0;
+    private boolean inPenaltyBox = false;
+    private boolean isGettingOutOfPenaltyBox = false;
 
     public Player(Printer printer, CategorisedQuestions categorisedQuestions, String name) {
         this.printer = printer;
@@ -15,15 +17,14 @@ public class Player {
         this.name = name;
     }
 
-    void rollPlayer(int roll) {
+    public void rollPlayer(int roll) {
         String currentPlayerName = name;
         printer.printLine(currentPlayerName + " is the current player");
         printer.printLine("They have rolled a " + roll);
 
         boolean isEven = roll % 2 == 0;
-        boolean playerIsInPenaltyBox = inPenaltyBox;
 
-        if (playerIsInPenaltyBox) {
+        if (inPenaltyBox) {
             isGettingOutOfPenaltyBox = !isEven;
             if (isGettingOutOfPenaltyBox) {
                 printer.printLine(currentPlayerName + " is getting out of the penalty box");
@@ -32,7 +33,7 @@ public class Player {
             }
         }
 
-        if (!playerIsInPenaltyBox || !isEven) {
+        if (!inPenaltyBox || isGettingOutOfPenaltyBox) {
             place += roll;
             if (place > 11) place = place - 12;
 
@@ -69,7 +70,7 @@ public class Player {
         }
     }
 
-    public boolean notWonYet() {
+    private boolean notWonYet() {
         return !(goldCoinsInPurse == 6);
     }
 

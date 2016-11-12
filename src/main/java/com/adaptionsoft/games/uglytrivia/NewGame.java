@@ -5,9 +5,7 @@ import java.util.List;
 
 public class NewGame implements Game {
     private final Printer printer;
-
     private final List<Player> playerList = new ArrayList<>();
-
     private final CategorisedQuestions categorisedQuestions;
 
     private int currentPlayer = 0;
@@ -45,22 +43,23 @@ public class NewGame implements Game {
 
     @Override
     public boolean wasCorrectlyAnswered() {
-        Player currentPlayerObj = getCurrentPlayer();
-        boolean won = currentPlayerObj.wasCorrectlyAnswered();
+        boolean won = getCurrentPlayer().wasCorrectlyAnswered();
 
-        currentPlayer++;
-        if (currentPlayer == howManyPlayers()) currentPlayer = 0;
+        nextPlayersTurn();
         return won;
     }
 
     @Override
     public boolean wrongAnswer(){
-        Player currentPlayerObj = getCurrentPlayer();
-        currentPlayerObj.wrongAnswer();
+        getCurrentPlayer().wrongAnswer();
 
+        nextPlayersTurn();
+        return true;
+    }
+
+    private void nextPlayersTurn() {
         currentPlayer++;
         if (currentPlayer == howManyPlayers()) currentPlayer = 0;
-        return true;
     }
 
 
