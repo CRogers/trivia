@@ -33,16 +33,12 @@ public class NewGame implements Game {
             popQuestions.offer("Pop Question " + i);
             scienceQuestions.offer(("Science Question " + i));
             sportsQuestions.offer(("Sports Question " + i));
-            rockQuestions.offer(createRockQuestion(i));
+            rockQuestions.offer("Rock Question " + i);
         }
     }
 
     public NewGame(){
         this(new StdoutPrinter());
-    }
-
-    private String createRockQuestion(int index){
-        return "Rock Question " + index;
     }
 
     @Override
