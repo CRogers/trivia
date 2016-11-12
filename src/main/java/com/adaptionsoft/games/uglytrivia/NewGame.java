@@ -23,7 +23,7 @@ public class NewGame implements Game {
 
     @Override
     public boolean add(String playerName) {
-        playerList.add(new Player(playerName));
+        playerList.add(new Player(printer, categorisedQuestions, playerName));
 
         printer.printLine(playerName + " was added");
         printer.printLine("They are player number " + howManyPlayers());
@@ -36,33 +36,7 @@ public class NewGame implements Game {
 
     @Override
     public void roll(int roll) {
-        Player currentPlayerObj = getCurrentPlayer();
-        String currentPlayerName = currentPlayerObj.name;
-        printer.printLine(currentPlayerName + " is the current player");
-        printer.printLine("They have rolled a " + roll);
-
-        boolean isEven = roll % 2 == 0;
-        boolean playerIsInPenaltyBox = currentPlayerObj.inPenaltyBox;
-
-        if (playerIsInPenaltyBox) {
-            currentPlayerObj.isGettingOutOfPenaltyBox = !isEven;
-            if (currentPlayerObj.isGettingOutOfPenaltyBox) {
-                printer.printLine(currentPlayerName + " is getting out of the penalty box");
-            } else {
-                printer.printLine(currentPlayerName + " is not getting out of the penalty box");
-            }
-        }
-
-        if (!playerIsInPenaltyBox || !isEven) {
-            currentPlayerObj.place += roll;
-            if (currentPlayerObj.place > 11) currentPlayerObj.place = currentPlayerObj.place - 12;
-
-            printer.printLine(currentPlayerName
-                    + "'s new location is "
-                    + currentPlayerObj.place);
-            categorisedQuestions.askQuestion(currentPlayerObj.place);
-        }
-
+        getCurrentPlayer().rollPlayer(roll);
     }
 
     private Player getCurrentPlayer() {
