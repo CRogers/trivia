@@ -6,15 +6,15 @@ import java.util.LinkedList;
 public class NewGame implements Game {
     private final Printer printer;
 
-    private final ArrayList players = new ArrayList();
+    private final ArrayList<String> players = new ArrayList<>();
     private final int[] places = new int[6];
     private final int[] purses  = new int[6];
     private final boolean[] inPenaltyBox  = new boolean[6];
 
-    private final LinkedList popQuestions = new LinkedList();
-    private final LinkedList scienceQuestions = new LinkedList();
-    private final LinkedList sportsQuestions = new LinkedList();
-    private final LinkedList rockQuestions = new LinkedList();
+    private final LinkedList<String> popQuestions = new LinkedList<>();
+    private final LinkedList<String> scienceQuestions = new LinkedList<>();
+    private final LinkedList<String> sportsQuestions = new LinkedList<>();
+    private final LinkedList<String> rockQuestions = new LinkedList<>();
 
     private int currentPlayer = 0;
     private boolean isGettingOutOfPenaltyBox;
