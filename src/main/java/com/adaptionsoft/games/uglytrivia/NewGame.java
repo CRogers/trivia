@@ -5,6 +5,11 @@ import java.util.LinkedList;
 import java.util.Objects;
 
 public class NewGame implements Game {
+    private static final String POP = "Pop";
+    private static final String SCIENCE = "Science";
+    private static final String SPORTS = "Sports";
+    private static final String ROCK = "Rock";
+
     private final Printer printer;
 
     private final ArrayList<String> players = new ArrayList<>();
@@ -98,27 +103,27 @@ public class NewGame implements Game {
     }
 
     private void askQuestion() {
-        if (Objects.equals(currentCategory(), "Pop"))
+        if (Objects.equals(currentCategory(), POP))
             printer.printLine(popQuestions.removeFirst());
-        if (Objects.equals(currentCategory(), "Science"))
+        if (Objects.equals(currentCategory(), SCIENCE))
             printer.printLine(scienceQuestions.removeFirst());
-        if (Objects.equals(currentCategory(), "Sports"))
+        if (Objects.equals(currentCategory(), SPORTS))
             printer.printLine(sportsQuestions.removeFirst());
-        if (Objects.equals(currentCategory(), "Rock"))
+        if (Objects.equals(currentCategory(), ROCK))
             printer.printLine(rockQuestions.removeFirst());
     }
 
 
     private String currentCategory() {
-        if (places[currentPlayer] == 0) return "Pop";
-        if (places[currentPlayer] == 4) return "Pop";
-        if (places[currentPlayer] == 8) return "Pop";
-        if (places[currentPlayer] == 1) return "Science";
-        if (places[currentPlayer] == 5) return "Science";
-        if (places[currentPlayer] == 9) return "Science";
-        if (places[currentPlayer] == 2) return "Sports";
-        if (places[currentPlayer] == 6) return "Sports";
-        if (places[currentPlayer] == 10) return "Sports";
+        if (places[currentPlayer] == 0) return POP;
+        if (places[currentPlayer] == 4) return POP;
+        if (places[currentPlayer] == 8) return POP;
+        if (places[currentPlayer] == 1) return SCIENCE;
+        if (places[currentPlayer] == 5) return SCIENCE;
+        if (places[currentPlayer] == 9) return SCIENCE;
+        if (places[currentPlayer] == 2) return SPORTS;
+        if (places[currentPlayer] == 6) return SPORTS;
+        if (places[currentPlayer] == 10) return SPORTS;
         return "Rock";
     }
 
