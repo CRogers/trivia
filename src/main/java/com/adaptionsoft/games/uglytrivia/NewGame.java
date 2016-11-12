@@ -3,6 +3,7 @@ package com.adaptionsoft.games.uglytrivia;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Objects;
+import java.util.Queue;
 
 public class NewGame implements Game {
     private static final String POP = "Pop";
@@ -18,10 +19,10 @@ public class NewGame implements Game {
     private final int[] purses  = new int[MAX_PLAYERS];
     private final boolean[] inPenaltyBox  = new boolean[MAX_PLAYERS];
 
-    private final LinkedList<String> popQuestions = new LinkedList<>();
-    private final LinkedList<String> scienceQuestions = new LinkedList<>();
-    private final LinkedList<String> sportsQuestions = new LinkedList<>();
-    private final LinkedList<String> rockQuestions = new LinkedList<>();
+    private final Queue<String> popQuestions = new LinkedList<>();
+    private final Queue<String> scienceQuestions = new LinkedList<>();
+    private final Queue<String> sportsQuestions = new LinkedList<>();
+    private final Queue<String> rockQuestions = new LinkedList<>();
 
     private int currentPlayer = 0;
     private boolean isGettingOutOfPenaltyBox;
@@ -29,10 +30,10 @@ public class NewGame implements Game {
     public NewGame(Printer printer) {
         this.printer = printer;
         for (int i = 0; i < 50; i++) {
-            popQuestions.addLast("Pop Question " + i);
-            scienceQuestions.addLast(("Science Question " + i));
-            sportsQuestions.addLast(("Sports Question " + i));
-            rockQuestions.addLast(createRockQuestion(i));
+            popQuestions.offer("Pop Question " + i);
+            scienceQuestions.offer(("Science Question " + i));
+            sportsQuestions.offer(("Sports Question " + i));
+            rockQuestions.offer(createRockQuestion(i));
         }
     }
 
@@ -101,13 +102,13 @@ public class NewGame implements Game {
 
     private void askQuestion() {
         if (Objects.equals(currentCategory(), POP))
-            printer.printLine(popQuestions.removeFirst());
+            printer.printLine(popQuestions.poll());
         if (Objects.equals(currentCategory(), SCIENCE))
-            printer.printLine(scienceQuestions.removeFirst());
+            printer.printLine(scienceQuestions.poll());
         if (Objects.equals(currentCategory(), SPORTS))
-            printer.printLine(sportsQuestions.removeFirst());
+            printer.printLine(sportsQuestions.poll());
         if (Objects.equals(currentCategory(), ROCK))
-            printer.printLine(rockQuestions.removeFirst());
+            printer.printLine(rockQuestions.poll());
     }
 
 
