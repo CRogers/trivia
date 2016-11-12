@@ -1,7 +1,7 @@
 package com.adaptionsoft.games.uglytrivia;
 
 public class Player {
-    private final Printer printer;
+    public final Printer printer;
     private final CategorisedQuestions categorisedQuestions;
     public final String name;
     private int place = 0;
@@ -41,5 +41,35 @@ public class Player {
                     + place);
             categorisedQuestions.askQuestion(place);
         }
+    }
+
+    public boolean wasCorrectlyAnsweredPlayer() {
+        if (inPenaltyBox){
+            if (isGettingOutOfPenaltyBox) {
+                printer.printLine("Answer was correct!!!!");
+                goldCoinsInPurse++;
+                printer.printLine(name
+                    + " now has "
+                    + goldCoinsInPurse
+                    + " Gold Coins.");
+
+                return notWonYet();
+            } else {
+                return true;
+            }
+        } else {
+            printer.printLine("Answer was corrent!!!!");
+            goldCoinsInPurse++;
+            printer.printLine(name
+                + " now has "
+                + goldCoinsInPurse
+                + " Gold Coins.");
+
+            return notWonYet();
+        }
+    }
+
+    public boolean notWonYet() {
+        return !(goldCoinsInPurse == 6);
     }
 }

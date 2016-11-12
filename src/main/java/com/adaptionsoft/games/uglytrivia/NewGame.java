@@ -46,39 +46,11 @@ public class NewGame implements Game {
     @Override
     public boolean wasCorrectlyAnswered() {
         Player currentPlayerObj = getCurrentPlayer();
-        if (currentPlayerObj.inPenaltyBox){
-            if (currentPlayerObj.isGettingOutOfPenaltyBox) {
-                printer.printLine("Answer was correct!!!!");
-                currentPlayerObj.goldCoinsInPurse++;
-                printer.printLine(currentPlayerObj.name
-                        + " now has "
-                        + currentPlayerObj.goldCoinsInPurse
-                        + " Gold Coins.");
+        boolean won = currentPlayerObj.wasCorrectlyAnsweredPlayer();
 
-                boolean winner = didPlayerWin();
-                currentPlayer++;
-                if (currentPlayer == howManyPlayers()) currentPlayer = 0;
-
-                return winner;
-            } else {
-                currentPlayer++;
-                if (currentPlayer == howManyPlayers()) currentPlayer = 0;
-                return true;
-            }
-        } else {
-            printer.printLine("Answer was corrent!!!!");
-            currentPlayerObj.goldCoinsInPurse++;
-            printer.printLine(currentPlayerObj.name
-                    + " now has "
-                    + currentPlayerObj.goldCoinsInPurse
-                    + " Gold Coins.");
-
-            boolean winner = didPlayerWin();
-            currentPlayer++;
-            if (currentPlayer == howManyPlayers()) currentPlayer = 0;
-
-            return winner;
-        }
+        currentPlayer++;
+        if (currentPlayer == howManyPlayers()) currentPlayer = 0;
+        return won;
     }
 
     @Override
@@ -94,8 +66,4 @@ public class NewGame implements Game {
     }
 
 
-    private boolean didPlayerWin() {
-        Player currentPlayerObj = getCurrentPlayer();
-        return !(currentPlayerObj.goldCoinsInPurse == 6);
-    }
 }
