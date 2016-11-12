@@ -6,10 +6,24 @@ import java.util.Objects;
 import java.util.Queue;
 
 public class NewGame implements Game {
-    private static final String POP = "Pop";
-    private static final String SCIENCE = "Science";
-    private static final String SPORTS = "Sports";
-    private static final String ROCK = "Rock";
+    private enum Category {
+        POP("Pop"),
+        SCIENCE("Science"),
+        SPORTS("Sports"),
+        ROCK("Rock");
+
+        private final String name;
+
+        Category(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
+
     private static final int MAX_PLAYERS = 6;
 
     private final Printer printer;
@@ -91,28 +105,28 @@ public class NewGame implements Game {
     }
 
     private void askQuestion() {
-        if (Objects.equals(currentCategory(), POP))
+        if (Objects.equals(currentCategory(), Category.POP))
             printer.printLine(popQuestions.poll());
-        if (Objects.equals(currentCategory(), SCIENCE))
+        if (Objects.equals(currentCategory(), Category.SCIENCE))
             printer.printLine(scienceQuestions.poll());
-        if (Objects.equals(currentCategory(), SPORTS))
+        if (Objects.equals(currentCategory(), Category.SPORTS))
             printer.printLine(sportsQuestions.poll());
-        if (Objects.equals(currentCategory(), ROCK))
+        if (Objects.equals(currentCategory(), Category.ROCK))
             printer.printLine(rockQuestions.poll());
     }
 
 
-    private String currentCategory() {
-        if (places[currentPlayer] == 0) return POP;
-        if (places[currentPlayer] == 4) return POP;
-        if (places[currentPlayer] == 8) return POP;
-        if (places[currentPlayer] == 1) return SCIENCE;
-        if (places[currentPlayer] == 5) return SCIENCE;
-        if (places[currentPlayer] == 9) return SCIENCE;
-        if (places[currentPlayer] == 2) return SPORTS;
-        if (places[currentPlayer] == 6) return SPORTS;
-        if (places[currentPlayer] == 10) return SPORTS;
-        return ROCK;
+    private Category currentCategory() {
+        if (places[currentPlayer] == 0) return Category.POP;
+        if (places[currentPlayer] == 4) return Category.POP;
+        if (places[currentPlayer] == 8) return Category.POP;
+        if (places[currentPlayer] == 1) return Category.SCIENCE;
+        if (places[currentPlayer] == 5) return Category.SCIENCE;
+        if (places[currentPlayer] == 9) return Category.SCIENCE;
+        if (places[currentPlayer] == 2) return Category.SPORTS;
+        if (places[currentPlayer] == 6) return Category.SPORTS;
+        if (places[currentPlayer] == 10) return Category.SPORTS;
+        return Category.ROCK;
     }
 
     @Override
