@@ -123,6 +123,6 @@ public class NewGame implements Game {
 
 
     private boolean didPlayerWin() {
-        return !(purses[currentPlayer] == MAX_PLAYERS);
+        return !(purses[currentPlayer] == 6);
     }
 }
