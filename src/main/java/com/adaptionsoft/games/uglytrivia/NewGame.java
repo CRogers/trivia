@@ -1,29 +1,8 @@
 package com.adaptionsoft.games.uglytrivia;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Objects;
-import java.util.Queue;
 
 public class NewGame implements Game {
-    private enum Category {
-        POP("Pop"),
-        SCIENCE("Science"),
-        SPORTS("Sports"),
-        ROCK("Rock");
-
-        private final String name;
-
-        Category(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
     private static final int MAX_PLAYERS = 6;
 
     private final Printer printer;
@@ -33,22 +12,14 @@ public class NewGame implements Game {
     private final int[] purses  = new int[MAX_PLAYERS];
     private final boolean[] inPenaltyBox  = new boolean[MAX_PLAYERS];
 
-    private final Queue<String> popQuestions = new LinkedList<>();
-    private final Queue<String> scienceQuestions = new LinkedList<>();
-    private final Queue<String> sportsQuestions = new LinkedList<>();
-    private final Queue<String> rockQuestions = new LinkedList<>();
+    private final CategorisedQuestions categorisedQuestions;
 
     private int currentPlayer = 0;
     private boolean isGettingOutOfPenaltyBox;
 
     public NewGame(Printer printer) {
         this.printer = printer;
-        for (int i = 0; i < 50; i++) {
-            popQuestions.offer("Pop Question " + i);
-            scienceQuestions.offer(("Science Question " + i));
-            sportsQuestions.offer(("Sports Question " + i));
-            rockQuestions.offer("Rock Question " + i);
-        }
+        this.categorisedQuestions = new CategorisedQuestions(printer);
     }
 
     public NewGame(){
@@ -98,35 +69,9 @@ public class NewGame implements Game {
             printer.printLine(players.get(currentPlayer)
                     + "'s new location is "
                     + places[currentPlayer]);
-            printer.printLine("The category is " + currentCategory());
-            askQuestion();
+            categorisedQuestions.askQuestion(places[currentPlayer]);
         }
 
-    }
-
-    private void askQuestion() {
-        if (Objects.equals(currentCategory(), Category.POP))
-            printer.printLine(popQuestions.poll());
-        if (Objects.equals(currentCategory(), Category.SCIENCE))
-            printer.printLine(scienceQuestions.poll());
-        if (Objects.equals(currentCategory(), Category.SPORTS))
-            printer.printLine(sportsQuestions.poll());
-        if (Objects.equals(currentCategory(), Category.ROCK))
-            printer.printLine(rockQuestions.poll());
-    }
-
-
-    private Category currentCategory() {
-        if (places[currentPlayer] == 0) return Category.POP;
-        if (places[currentPlayer] == 4) return Category.POP;
-        if (places[currentPlayer] == 8) return Category.POP;
-        if (places[currentPlayer] == 1) return Category.SCIENCE;
-        if (places[currentPlayer] == 5) return Category.SCIENCE;
-        if (places[currentPlayer] == 9) return Category.SCIENCE;
-        if (places[currentPlayer] == 2) return Category.SPORTS;
-        if (places[currentPlayer] == 6) return Category.SPORTS;
-        if (places[currentPlayer] == 10) return Category.SPORTS;
-        return Category.ROCK;
     }
 
     @Override
