@@ -2,6 +2,7 @@ package com.adaptionsoft.games.uglytrivia;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Objects;
 
 public class NewGame implements Game {
     private final Printer printer;
@@ -97,13 +98,13 @@ public class NewGame implements Game {
     }
 
     private void askQuestion() {
-        if (currentCategory() == "Pop")
+        if (Objects.equals(currentCategory(), "Pop"))
             printer.printLine(popQuestions.removeFirst());
-        if (currentCategory() == "Science")
+        if (Objects.equals(currentCategory(), "Science"))
             printer.printLine(scienceQuestions.removeFirst());
-        if (currentCategory() == "Sports")
+        if (Objects.equals(currentCategory(), "Sports"))
             printer.printLine(sportsQuestions.removeFirst());
-        if (currentCategory() == "Rock")
+        if (Objects.equals(currentCategory(), "Rock"))
             printer.printLine(rockQuestions.removeFirst());
     }
 
