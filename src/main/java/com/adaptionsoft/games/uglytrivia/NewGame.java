@@ -39,12 +39,8 @@ public class NewGame implements Game {
         this(new StdoutPrinter());
     }
 
-    public String createRockQuestion(int index){
+    private String createRockQuestion(int index){
         return "Rock Question " + index;
-    }
-
-    public boolean isPlayable() {
-        return (howManyPlayers() >= 2);
     }
 
     @Override
