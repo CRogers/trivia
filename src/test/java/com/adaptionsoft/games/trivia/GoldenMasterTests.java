@@ -44,8 +44,8 @@ public class GoldenMasterTests {
         @InRange(minInt = 2, maxInt = 6) int numberOfPlayers,
         List<@From(Ctor.class) Play> plays) {
 
-        String goldenMasterOutput = playGame(numberOfPlayers, plays, NewGame::new);
-        String newGameOutput = playGame(numberOfPlayers, plays, GoldenMasterGame::new);
+        String goldenMasterOutput = playGame(numberOfPlayers, plays, GoldenMasterGame::new);
+        String newGameOutput = playGame(numberOfPlayers, plays, NewGame::new);
 
         assertThat(newGameOutput).isEqualTo(goldenMasterOutput);
     }
