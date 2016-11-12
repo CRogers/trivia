@@ -1,6 +1,7 @@
 package com.adaptionsoft.games.trivia;
 
 import com.adaptionsoft.games.uglytrivia.Game;
+import com.adaptionsoft.games.uglytrivia.NewGame;
 import com.pholser.junit.quickcheck.From;
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.generator.Ctor;
@@ -41,7 +42,7 @@ public class GoldenMasterTests {
 
         System.out.println(String.format("%d\n%s", numberOfPlayers, plays));
 
-        Game game = new Game();
+        Game game = new NewGame();
         for (int i = 1; i < numberOfPlayers; i++) {
             game.add("Player " + i);
         }
