@@ -10,7 +10,7 @@ public class NewGame implements Game {
     private static final String SCIENCE = "Science";
     private static final String SPORTS = "Sports";
     private static final String ROCK = "Rock";
-    public static final int MAX_PLAYERS = 6;
+    private static final int MAX_PLAYERS = 6;
 
     private final Printer printer;
 
@@ -118,7 +118,7 @@ public class NewGame implements Game {
         if (places[currentPlayer] == 2) return SPORTS;
         if (places[currentPlayer] == 6) return SPORTS;
         if (places[currentPlayer] == 10) return SPORTS;
-        return "Rock";
+        return ROCK;
     }
 
     @Override
