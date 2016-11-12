@@ -46,7 +46,7 @@ public class NewGame implements Game {
     @Override
     public boolean wasCorrectlyAnswered() {
         Player currentPlayerObj = getCurrentPlayer();
-        boolean won = currentPlayerObj.wasCorrectlyAnsweredPlayer();
+        boolean won = currentPlayerObj.wasCorrectlyAnswered();
 
         currentPlayer++;
         if (currentPlayer == howManyPlayers()) currentPlayer = 0;
@@ -56,9 +56,7 @@ public class NewGame implements Game {
     @Override
     public boolean wrongAnswer(){
         Player currentPlayerObj = getCurrentPlayer();
-        printer.printLine("Question was incorrectly answered");
-        printer.printLine(currentPlayerObj.name + " was sent to the penalty box");
-        currentPlayerObj.inPenaltyBox = true;
+        currentPlayerObj.wrongAnswer();
 
         currentPlayer++;
         if (currentPlayer == howManyPlayers()) currentPlayer = 0;

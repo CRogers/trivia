@@ -1,7 +1,7 @@
 package com.adaptionsoft.games.uglytrivia;
 
 public class Player {
-    public final Printer printer;
+    private final Printer printer;
     private final CategorisedQuestions categorisedQuestions;
     public final String name;
     private int place = 0;
@@ -43,7 +43,7 @@ public class Player {
         }
     }
 
-    public boolean wasCorrectlyAnsweredPlayer() {
+    public boolean wasCorrectlyAnswered() {
         if (inPenaltyBox){
             if (isGettingOutOfPenaltyBox) {
                 printer.printLine("Answer was correct!!!!");
@@ -71,5 +71,11 @@ public class Player {
 
     public boolean notWonYet() {
         return !(goldCoinsInPurse == 6);
+    }
+
+    public void wrongAnswer() {
+        printer.printLine("Question was incorrectly answered");
+        printer.printLine(name + " was sent to the penalty box");
+        inPenaltyBox = true;
     }
 }
