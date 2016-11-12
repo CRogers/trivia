@@ -61,29 +61,23 @@ public class NewGame implements Game {
 
     @Override
     public void roll(int roll) {
-        printer.printLine(players.get(currentPlayer) + " is the current player");
+        String currentPlayerName = players.get(currentPlayer);
+        printer.printLine(currentPlayerName + " is the current player");
         printer.printLine("They have rolled a " + roll);
 
-        if (inPenaltyBox[currentPlayer]) {
-            if (roll % 2 != 0) {
-                isGettingOutOfPenaltyBox = true;
+        boolean isEven = roll % 2 == 0;
+        boolean playerIsInPenaltyBox = inPenaltyBox[currentPlayer];
 
-                printer.printLine(players.get(currentPlayer) + " is getting out of the penalty box");
-                places[currentPlayer] = places[currentPlayer] + roll;
-                if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
-
-                printer.printLine(players.get(currentPlayer)
-                        + "'s new location is "
-                        + places[currentPlayer]);
-                printer.printLine("The category is " + currentCategory());
-                askQuestion();
+        if (playerIsInPenaltyBox) {
+            isGettingOutOfPenaltyBox = !isEven;
+            if (isGettingOutOfPenaltyBox) {
+                printer.printLine(currentPlayerName + " is getting out of the penalty box");
             } else {
-                printer.printLine(players.get(currentPlayer) + " is not getting out of the penalty box");
-                isGettingOutOfPenaltyBox = false;
-                }
+                printer.printLine(currentPlayerName + " is not getting out of the penalty box");
+            }
+        }
 
-        } else {
-
+        if (!playerIsInPenaltyBox || !isEven) {
             places[currentPlayer] = places[currentPlayer] + roll;
             if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
 
