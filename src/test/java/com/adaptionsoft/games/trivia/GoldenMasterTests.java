@@ -2,6 +2,7 @@ package com.adaptionsoft.games.trivia;
 
 import com.adaptionsoft.games.uglytrivia.Game;
 import com.adaptionsoft.games.uglytrivia.NewGame;
+import com.adaptionsoft.games.uglytrivia.Printer;
 import com.pholser.junit.quickcheck.From;
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.generator.Ctor;
@@ -10,6 +11,9 @@ import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import org.junit.runner.RunWith;
 
 import java.util.List;
+import java.util.function.Function;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(JUnitQuickcheck.class)
 public class GoldenMasterTests {
@@ -35,14 +39,20 @@ public class GoldenMasterTests {
     }
 
 
-    @Property
+    @Property(trials = 1000)
     public void golden_master_and_new_are_the_same(
         @InRange(minInt = 2, maxInt = 6) int numberOfPlayers,
         List<@From(Ctor.class) Play> plays) {
 
-        System.out.println(String.format("%d\n%s", numberOfPlayers, plays));
+        String goldenMasterOutput = playGame(numberOfPlayers, plays, NewGame::new);
+        String newGameOutput = playGame(numberOfPlayers, plays, GoldenMasterGame::new);
 
-        Game game = new NewGame();
+        assertThat(newGameOutput).isEqualTo(goldenMasterOutput);
+    }
+
+    private String playGame(int numberOfPlayers, List<Play> plays, Function<Printer, Game> ctor) {
+        CapturingPrinter capturingPrinter = new CapturingPrinter();
+        Game game = ctor.apply(capturingPrinter);
         for (int i = 1; i < numberOfPlayers; i++) {
             game.add("Player " + i);
         }
@@ -60,7 +70,6 @@ public class GoldenMasterTests {
                 break;
             }
         }
-
-        System.out.println("\n\n----------------------------------------\n\n");
+        return capturingPrinter.capturedOutput();
     }
 }
