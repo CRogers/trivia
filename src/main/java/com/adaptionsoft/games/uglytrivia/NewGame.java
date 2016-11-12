@@ -11,7 +11,6 @@ public class NewGame implements Game {
     private final CategorisedQuestions categorisedQuestions;
 
     private int currentPlayer = 0;
-    private boolean isGettingOutOfPenaltyBox;
 
     public NewGame(Printer printer) {
         this.printer = printer;
@@ -37,7 +36,7 @@ public class NewGame implements Game {
 
     @Override
     public void roll(int roll) {
-        Player currentPlayerObj = playerList.get(currentPlayer);
+        Player currentPlayerObj = getCurrentPlayer();
         String currentPlayerName = currentPlayerObj.name;
         printer.printLine(currentPlayerName + " is the current player");
         printer.printLine("They have rolled a " + roll);
@@ -46,8 +45,8 @@ public class NewGame implements Game {
         boolean playerIsInPenaltyBox = currentPlayerObj.inPenaltyBox;
 
         if (playerIsInPenaltyBox) {
-            isGettingOutOfPenaltyBox = !isEven;
-            if (isGettingOutOfPenaltyBox) {
+            currentPlayerObj.isGettingOutOfPenaltyBox = !isEven;
+            if (currentPlayerObj.isGettingOutOfPenaltyBox) {
                 printer.printLine(currentPlayerName + " is getting out of the penalty box");
             } else {
                 printer.printLine(currentPlayerName + " is not getting out of the penalty box");
@@ -66,11 +65,15 @@ public class NewGame implements Game {
 
     }
 
+    private Player getCurrentPlayer() {
+        return playerList.get(currentPlayer);
+    }
+
     @Override
     public boolean wasCorrectlyAnswered() {
-        Player currentPlayerObj = playerList.get(currentPlayer);
+        Player currentPlayerObj = getCurrentPlayer();
         if (currentPlayerObj.inPenaltyBox){
-            if (isGettingOutOfPenaltyBox) {
+            if (currentPlayerObj.isGettingOutOfPenaltyBox) {
                 printer.printLine("Answer was correct!!!!");
                 currentPlayerObj.goldCoinsInPurse++;
                 printer.printLine(currentPlayerObj.name
@@ -106,7 +109,7 @@ public class NewGame implements Game {
 
     @Override
     public boolean wrongAnswer(){
-        Player currentPlayerObj = playerList.get(currentPlayer);
+        Player currentPlayerObj = getCurrentPlayer();
         printer.printLine("Question was incorrectly answered");
         printer.printLine(currentPlayerObj.name + " was sent to the penalty box");
         currentPlayerObj.inPenaltyBox = true;
@@ -118,7 +121,7 @@ public class NewGame implements Game {
 
 
     private boolean didPlayerWin() {
-        Player currentPlayerObj = playerList.get(currentPlayer);
+        Player currentPlayerObj = getCurrentPlayer();
         return !(currentPlayerObj.goldCoinsInPurse == 6);
     }
 }

@@ -5,6 +5,7 @@ public class Player {
     public int place = 0;
     public int goldCoinsInPurse = 0;
     public boolean inPenaltyBox = false;
+    public boolean isGettingOutOfPenaltyBox = false;
 
     public Player(String name) {
         this.name = name;
