@@ -98,13 +98,13 @@ public class NewGame implements Game {
 
     private void askQuestion() {
         if (currentCategory() == "Pop")
-            printer.printLine(popQuestions.removeFirst().toString());
+            printer.printLine(popQuestions.removeFirst());
         if (currentCategory() == "Science")
-            printer.printLine(scienceQuestions.removeFirst().toString());
+            printer.printLine(scienceQuestions.removeFirst());
         if (currentCategory() == "Sports")
-            printer.printLine(sportsQuestions.removeFirst().toString());
+            printer.printLine(sportsQuestions.removeFirst());
         if (currentCategory() == "Rock")
-            printer.printLine(rockQuestions.removeFirst().toString());
+            printer.printLine(rockQuestions.removeFirst());
     }
 
 
