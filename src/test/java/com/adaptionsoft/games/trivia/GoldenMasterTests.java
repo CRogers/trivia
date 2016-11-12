@@ -39,7 +39,7 @@ public class GoldenMasterTests {
     }
 
 
-    @Property(trials = 1000)
+    @Property(trials = 250)
     public void golden_master_and_new_are_the_same(
         @InRange(minInt = 2, maxInt = 6) int numberOfPlayers,
         List<@From(Ctor.class) Play> plays) {
