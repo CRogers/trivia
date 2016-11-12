@@ -110,13 +110,13 @@ public class NewGame implements Game {
 
     private String currentCategory() {
         if (places[currentPlayer] == 0) return POP;
-        if (places[currentPlayer] == 1) return SCIENCE;
-        if (places[currentPlayer] == 2) return SPORTS;
         if (places[currentPlayer] == 4) return POP;
-        if (places[currentPlayer] == 5) return SCIENCE;
-        if (places[currentPlayer] == 6) return SPORTS;
         if (places[currentPlayer] == 8) return POP;
+        if (places[currentPlayer] == 1) return SCIENCE;
+        if (places[currentPlayer] == 5) return SCIENCE;
         if (places[currentPlayer] == 9) return SCIENCE;
+        if (places[currentPlayer] == 2) return SPORTS;
+        if (places[currentPlayer] == 6) return SPORTS;
         if (places[currentPlayer] == 10) return SPORTS;
         return ROCK;
     }
