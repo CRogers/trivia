@@ -1,13 +1,14 @@
 package com.adaptionsoft.games.uglytrivia;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NewGame implements Game {
     private static final int MAX_PLAYERS = 6;
 
     private final Printer printer;
 
-    private final ArrayList<String> players = new ArrayList<>();
+    private final List<String> players = new ArrayList<>();
     private final int[] places = new int[MAX_PLAYERS];
     private final int[] purses  = new int[MAX_PLAYERS];
     private final boolean[] inPenaltyBox  = new boolean[MAX_PLAYERS];
@@ -28,8 +29,6 @@ public class NewGame implements Game {
 
     @Override
     public boolean add(String playerName) {
-
-
         players.add(playerName);
         places[howManyPlayers()] = 0;
         purses[howManyPlayers()] = 0;
@@ -95,11 +94,7 @@ public class NewGame implements Game {
                 if (currentPlayer == players.size()) currentPlayer = 0;
                 return true;
             }
-
-
-
         } else {
-
             printer.printLine("Answer was corrent!!!!");
             purses[currentPlayer]++;
             printer.printLine(players.get(currentPlayer)
