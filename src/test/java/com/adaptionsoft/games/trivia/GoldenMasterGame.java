@@ -151,7 +151,7 @@ public class GoldenMasterGame implements Game {
 			
 		} else {
 		
-			printer.printLine("Answer was corrent!!!!");
+			printer.printLine("Answer was correct!!!!");
 			purses[currentPlayer]++;
 			printer.printLine(players.get(currentPlayer) 
 					+ " now has "

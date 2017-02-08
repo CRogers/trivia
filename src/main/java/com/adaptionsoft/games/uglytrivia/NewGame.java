@@ -1,180 +1,172 @@
 package com.adaptionsoft.games.uglytrivia;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
+
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
 
 public class NewGame implements Game {
-	private final Printer printer;
+    private final Printer printer;
 
-    ArrayList players = new ArrayList();
-    int[] places = new int[6];
-    int[] purses  = new int[6];
-    boolean[] inPenaltyBox  = new boolean[6];
-    
-    LinkedList popQuestions = new LinkedList();
-    LinkedList scienceQuestions = new LinkedList();
-    LinkedList sportsQuestions = new LinkedList();
-    LinkedList rockQuestions = new LinkedList();
-    
-    int currentPlayer = 0;
-    boolean isGettingOutOfPenaltyBox;
+    private final List<Player> players = new ArrayList<>();
 
-	public NewGame(Printer printer) {
-		this.printer = printer;
-		for (int i = 0; i < 50; i++) {
-			popQuestions.addLast("Pop Question " + i);
-			scienceQuestions.addLast(("Science Question " + i));
-			sportsQuestions.addLast(("Sports Question " + i));
-			rockQuestions.addLast(createRockQuestion(i));
-		}
-	}
+    private ListMultimap<Category, String> questions = ArrayListMultimap.create();
 
-	public NewGame(){
-    	this(new StdoutPrinter());
+    private int currentPlayer = 0;
+    private boolean isAllowedToScoreFromPenaltyBoxThisTurn;
+
+    public NewGame(Printer printer) {
+        this.printer = printer;
+        populateQuestions();
     }
 
-	public String createRockQuestion(int index){
-		return "Rock Question " + index;
-	}
-	
-	public boolean isPlayable() {
-		return (howManyPlayers() >= 2);
-	}
+    private void populateQuestions() {
+        for (int i = 0; i < 50; i++) {
+            for (Category category: Category.values()) {
+                questions.put(category, category + " Question " + i);
+            }
+        }
+    }
 
-	@Override
+    public NewGame() {
+        this(new StdoutPrinter());
+    }
+
+    @Override
     public boolean add(String playerName) {
-		
-		
-	    players.add(playerName);
-	    places[howManyPlayers()] = 0;
-	    purses[howManyPlayers()] = 0;
-	    inPenaltyBox[howManyPlayers()] = false;
-	    
-	    printer.printLine(playerName + " was added");
-	    printer.printLine("They are player number " + players.size());
-		return true;
-	}
-	
-	public int howManyPlayers() {
-		return players.size();
-	}
+        players.add(new Player(playerName));
 
-	@Override
+        printer.printLine(playerName + " was added");
+        printer.printLine("They are player number " + players.size());
+        return true;
+    }
+
+    private int howManyPlayers() {
+        return players.size();
+    }
+
+    @Override
     public void roll(int roll) {
-		printer.printLine(players.get(currentPlayer) + " is the current player");
-		printer.printLine("They have rolled a " + roll);
-		
-		if (inPenaltyBox[currentPlayer]) {
-			if (roll % 2 != 0) {
-				isGettingOutOfPenaltyBox = true;
-				
-				printer.printLine(players.get(currentPlayer) + " is getting out of the penalty box");
-				places[currentPlayer] = places[currentPlayer] + roll;
-				if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
-				
-				printer.printLine(players.get(currentPlayer) 
-						+ "'s new location is " 
-						+ places[currentPlayer]);
-				printer.printLine("The category is " + currentCategory());
-				askQuestion();
-			} else {
-				printer.printLine(players.get(currentPlayer) + " is not getting out of the penalty box");
-				isGettingOutOfPenaltyBox = false;
-				}
-			
-		} else {
-		
-			places[currentPlayer] = places[currentPlayer] + roll;
-			if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
-			
-			printer.printLine(players.get(currentPlayer) 
-					+ "'s new location is " 
-					+ places[currentPlayer]);
-			printer.printLine("The category is " + currentCategory());
-			askQuestion();
-		}
-		
-	}
+        printer.printLine(getCurrentPlayer().name() + " is the current player");
+        printer.printLine("They have rolled a " + roll);
 
-	private void askQuestion() {
-		if (currentCategory() == "Pop")
-			printer.printLine(popQuestions.removeFirst().toString());
-		if (currentCategory() == "Science")
-			printer.printLine(scienceQuestions.removeFirst().toString());
-		if (currentCategory() == "Sports")
-			printer.printLine(sportsQuestions.removeFirst().toString());
-		if (currentCategory() == "Rock")
-			printer.printLine(rockQuestions.removeFirst().toString());
-	}
-	
-	
-	private String currentCategory() {
-		if (places[currentPlayer] == 0) return "Pop";
-		if (places[currentPlayer] == 4) return "Pop";
-		if (places[currentPlayer] == 8) return "Pop";
-		if (places[currentPlayer] == 1) return "Science";
-		if (places[currentPlayer] == 5) return "Science";
-		if (places[currentPlayer] == 9) return "Science";
-		if (places[currentPlayer] == 2) return "Sports";
-		if (places[currentPlayer] == 6) return "Sports";
-		if (places[currentPlayer] == 10) return "Sports";
-		return "Rock";
-	}
+        if (getCurrentPlayer().isinPenaltyBox()) {
+            if (roll % 2 != 0) {
+                isAllowedToScoreFromPenaltyBoxThisTurn = true;
 
-	@Override
+                printer.printLine(getCurrentPlayer().name() + " is getting out of the penalty box");
+                addRollToPlace(roll);
+                askQuestion();
+            } else {
+                printer.printLine(getCurrentPlayer().name() + " is not getting out of the penalty box");
+                isAllowedToScoreFromPenaltyBoxThisTurn = false;
+            }
+        } else {
+            addRollToPlace(roll);
+            askQuestion();
+        }
+    }
+
+    private void addRollToPlace(int roll) {
+        Player currentPlayer = getCurrentPlayer();
+        currentPlayer.place((currentPlayer.place() + roll) % 12);
+
+        printer.printLine(currentPlayer.name()
+            + "'s new location is "
+            + currentPlayer.place());
+        printer.printLine("The category is " + currentCategory());
+    }
+
+    private void askQuestion() {
+        printer.printLine(questions.get(currentCategory()).remove(0));
+    }
+
+    private Category currentCategory() {
+        int place = getCurrentPlayer().place();
+        return Category.getCategoryForPlace(place);
+    }
+
+    @Override
     public boolean wasCorrectlyAnswered() {
-		if (inPenaltyBox[currentPlayer]){
-			if (isGettingOutOfPenaltyBox) {
-				printer.printLine("Answer was correct!!!!");
-				purses[currentPlayer]++;
-				printer.printLine(players.get(currentPlayer) 
-						+ " now has "
-						+ purses[currentPlayer]
-						+ " Gold Coins.");
-				
-				boolean winner = didPlayerWin();
-				currentPlayer++;
-				if (currentPlayer == players.size()) currentPlayer = 0;
-				
-				return winner;
-			} else {
-				currentPlayer++;
-				if (currentPlayer == players.size()) currentPlayer = 0;
-				return true;
-			}
-			
-			
-			
-		} else {
-		
-			printer.printLine("Answer was corrent!!!!");
-			purses[currentPlayer]++;
-			printer.printLine(players.get(currentPlayer) 
-					+ " now has "
-					+ purses[currentPlayer]
-					+ " Gold Coins.");
-			
-			boolean winner = didPlayerWin();
-			currentPlayer++;
-			if (currentPlayer == players.size()) currentPlayer = 0;
-			
-			return winner;
-		}
-	}
-	
-	@Override
-    public boolean wrongAnswer(){
-		printer.printLine("Question was incorrectly answered");
-		printer.printLine(players.get(currentPlayer)+ " was sent to the penalty box");
-		inPenaltyBox[currentPlayer] = true;
-		
-		currentPlayer++;
-		if (currentPlayer == players.size()) currentPlayer = 0;
-		return true;
-	}
+        boolean winner = true;
+        if (!getCurrentPlayer().isinPenaltyBox() || isAllowedToScoreFromPenaltyBoxThisTurn) {
+            printer.printLine("Answer was correct!!!!");
+            incrementPurse();
+            printer.printLine(getCurrentPlayer().name()
+                + " now has "
+                + getCurrentPlayer().purse()
+                + " Gold Coins.");
+            winner = didPlayerWin();
+        }
+        advancePlayerTurn();
+        return winner;
+    }
 
+    private void incrementPurse() {
+        getCurrentPlayer().purse(getCurrentPlayer().purse() + 1);
+    }
 
-	private boolean didPlayerWin() {
-		return !(purses[currentPlayer] == 6);
-	}
+    private void advancePlayerTurn() {
+        currentPlayer++;
+        if (currentPlayer == players.size()) currentPlayer = 0;
+    }
+
+    @Override
+    public boolean wrongAnswer() {
+        printer.printLine("Question was incorrectly answered");
+        printer.printLine(getCurrentPlayer().name() + " was sent to the penalty box");
+        putInPenaltyBox();
+
+        advancePlayerTurn();
+        return true;
+    }
+
+    private void putInPenaltyBox() {
+        getCurrentPlayer().inPenaltyBox(true);
+    }
+
+    private Player getCurrentPlayer() {
+        return players.get(currentPlayer);
+    }
+
+    private boolean didPlayerWin() {
+        return !(getCurrentPlayer().purse() == 6);
+    }
+
+    private enum Category {
+        POP("Pop"),
+        SCIENCE("Science"),
+        SPORTS("Sports"),
+        ROCK("Rock"),
+        ;
+
+        private final String label;
+
+        /* private */ Category(String label) {
+            this.label = label;
+        }
+
+        private static Category getCategoryForPlace(int place) {
+            int numCategories = values().length;
+            int categoryIndex = place % numCategories;
+            switch (categoryIndex) {
+                case 0:
+                    return POP;
+                case 1:
+                    return SCIENCE;
+                case 2:
+                    return SPORTS;
+                case 3:
+                    return ROCK;
+                default:
+                    throw new IllegalStateException("oops");
+            }
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }
+    }
 }
